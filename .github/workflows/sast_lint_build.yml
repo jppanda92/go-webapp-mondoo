@@ -1,0 +1,35 @@
+name: SAST, Lint, and Build
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
+
+      - name: Run SAST with Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: "p/default"
+
+      - name: Run Golang Linter
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+
+      - name: Build the Binary
+        run: |
+          go build -o mondoo-webapp main.go
+          ls -lh mondoo-webapp
