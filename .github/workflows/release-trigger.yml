@@ -19,4 +19,4 @@ jobs:
         with:
           repository: jppanda92/go-webapp-deployment
           event-type: trigger-release
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CROSS_REPO_TOKEN }}
