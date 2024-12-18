@@ -2,7 +2,9 @@ name: Trigger Docker Build in Repo 2
 
 on:
   release:
-    types: [published]
+    types:
+      - published
+      - created
 
 jobs:
   trigger-release:
