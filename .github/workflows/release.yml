@@ -37,7 +37,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           TAG="v$(date +'%Y%m%d%H%M%S')"
-          echo "TAG=$TAG" >> $GITHUB_ENV  # Save TAG to environment for later steps
+          echo "TAG=$TAG" >> $GITHUB_OUTPUT # Save TAG to outputs for later steps
           git tag "$TAG"
           git push origin "$TAG"
         env:
