@@ -24,3 +24,5 @@ EXPOSE 8080
 
 # Command to run the Go web application
 CMD ["./mondoo-webapp"]
+
+#Triggering a new build
