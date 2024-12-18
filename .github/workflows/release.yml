@@ -29,13 +29,15 @@ jobs:
         run: |
           go build -o mondoo-webapp main.go
           mkdir -p artifacts
-          mv mondoo-webapp ./artifacts/sidekick-${GITHUB_SHA}.zip
+          mv mondoo-webapp ./artifacts/
 
       # Tag the release (only on push to main)
       - name: Tag
+        id: tag
         if: github.ref == 'refs/heads/main'
         run: |
           TAG="v$(date +'%Y%m%d%H%M%S')"
+          echo "TAG=$TAG" >> $GITHUB_ENV  # Save TAG to environment for later steps
           git tag "$TAG"
           git push origin "$TAG"
         env:
@@ -46,8 +48,8 @@ jobs:
         if: github.ref == 'refs/heads/main' || github.event_name == 'release'
         uses: softprops/action-gh-release@v1
         with:
-          name: v${{ steps.tag.outputs.TAG }}
+          name: ${{ steps.tag.outputs.TAG }}  # Reference the tag created in previous step
           prerelease: false
-          files: ./artifacts/sidekick-*.zip
+          files: ./artifacts/mondoo-webapp  # Upload the binary
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
