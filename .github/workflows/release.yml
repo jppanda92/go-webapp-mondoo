@@ -1,26 +1,45 @@
 name: Release Binary
 
+# Trigger the workflow on push to the main branch
 on:
+  push:
+    branches:
+      - main
   release:
-    types: [created]
+    types:
+      - published
 
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the code
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      # Set up Go environment
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: 1.21
 
+      # Build the binary
       - name: Build Binary
         run: |
           go build -o mondoo-webapp main.go
 
+      # Create a new GitHub release based on the current commit hash
+      - name: Create Release
+        id: create_release
+        run: |
+          RELEASE_TAG="v$(date +'%Y%m%d%H%M%S')"
+          echo "Creating release with tag: $RELEASE_TAG"
+          gh release create $RELEASE_TAG mondoo-webapp --title "Release $RELEASE_TAG" --notes "Automated release for commit $GITHUB_SHA"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Upload the binary to the newly created release
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v1
         with:
