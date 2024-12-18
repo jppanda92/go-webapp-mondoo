@@ -1,0 +1,17 @@
+name: Trigger Docker Build in Repo 2
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  trigger-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Phase 2 Repo Action
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          repository: jppanda92/go-webapp-deployment
+          event-type: trigger-release
+          token: ${{ secrets.GITHUB_TOKEN }}
