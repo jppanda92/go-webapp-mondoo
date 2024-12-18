@@ -48,7 +48,7 @@ jobs:
         if: github.ref == 'refs/heads/main' || github.event_name == 'release'
         uses: softprops/action-gh-release@v1
         with:
-          name: ${{ steps.tag.outputs.TAG }}  # Reference the tag created in previous step
+          tag_name: ${{ steps.tag.outputs.TAG }}  # Reference the tag created in previous step
           prerelease: false
           files: ./artifacts/mondoo-webapp  # Upload the binary
         env:
